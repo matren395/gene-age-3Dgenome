@@ -1,8 +1,8 @@
 # gene-age-3Dgenome
 
-Collection of scripts and notebooks released to accompany the manuscript entitled "Functional associations of evolutionarily recent human genes exhibit sensitivity to the 3D genome landscape and disease" by Katherine Fleck, Victor Luria, Nitanta Garag, Amir Karger, Trevor Hunter, Daniel Marten, William Phu, Kee-Myoung Nam, Nenad Sestan, Anne H. O'Donnell-Luria, Jelena Erceg.
+Collection of scripts and notebooks released to accompany the manuscript entitled "Functional associations of evolutionarily recent human genes exhibit sensitivity to the 3D genome landscape and disease" by Katherine Fleck, Victor Luria, Daniel Marten, Nitanta Garag, Amir Karger, Trevor Hunter, William Phu, Kee-Myoung Nam, Nenad Sestan, Anne H. O'Donnell-Luria, Jelena Erceg.
 
-Correspondence to: odonnell@broadinstitute.org (A.O.D.L.); jelena.erceg@uconn.edu (J.E.).
+Correspondence to: nenad.sestan@yale.edu (N.S.), odonnell@broadinstitute.org (A.O.D.L.); jelena.erceg@uconn.edu (J.E.).
 
 Distributed under the following license:
 
