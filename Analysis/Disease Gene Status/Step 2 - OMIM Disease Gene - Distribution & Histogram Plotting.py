@@ -163,11 +163,9 @@ df6_hist["priority"] = [priority_map[xi] for xi in df6_hist.disease_gene_inherit
 # Histogram for disease counts by 3 and 5 eras
 # for all disease statuses, only recessive & dominant, & R+D split by sex chr
 
-for hist_config in ["evolutionary_category", "evolutionary_category_3era"]:
+for hist_config in ["evolutionary_category_3era"]:
 
-    era_str = "5_era"
-    if "3era" in hist_config:
-        era_str = "3_era"
+    era_str = "3_era"
 
     for inheritance in [
         "disease_gene_inheritance",
@@ -252,11 +250,9 @@ for hist_config in ["evolutionary_category", "evolutionary_category_3era"]:
 # Histogram for Proportional Makeup by 3&5 Eras
 # - for all disease statuses, only recessive & dominant, & R+D split by sex chr
 
-for hist_config in ["evolutionary_category", "evolutionary_category_3era"]:
+for hist_config in ["evolutionary_category_3era"]:
 
-    era_str = "5_era"
-    if "3era" in hist_config:
-        era_str = "3_era"
+    era_str = "3_era"
 
     for inheritance in [
         "disease_gene_inheritance",
@@ -361,126 +357,13 @@ df6_hist["disease_gene_binary_str"] = [
 simple_palette = {"OMIM-Disease": disease_palette["Dominant"], "Non-Disease": "yellow"}
 
 
-# Histogram for Counts by Eras by OMIM Disease & Non-Disease Status
-
-for hist_config in ["evolutionary_category", "evolutionary_category_3era"]:
-
-    era_str = "5_era"
-    if "3era" in hist_config:
-        era_str = "3_era"
-
-    for inheritance in ["disease_gene_binary_str"]:
-
-        # Overall by Disease Gene Status
-        plt.figure(figsize=(10, 8), dpi=80)
-        sns.histplot(
-            data=df6_hist.sort_values(
-                by=[hist_config, inheritance], ascending=[True, False]
-            ),
-            x=hist_config,
-            stat="count",
-            common_norm=False,
-            linewidth=1,
-            hue=inheritance,
-            multiple="stack",
-            palette=simple_palette,
-        )
-
-        labels = ["Non-Disease", "OMIM-Disease"]
-
-        xOnes, xTwos = plt.xticks()
-
-        xTwos = ["Ancient", "Metazoan", "Chordate", "Mammal", "Primate"]
-
-        if era_str == "3_era":
-            xTwos = xTwos[:3]
-
-        plt.xticks(xOnes, xTwos, size=20)
-
-        plt.yticks(size=20)
-        plt.xlabel("Evolutionary Category", size=36)
-        plt.ylabel("Count", size=32)
-        plt.legend(
-            bbox_to_anchor=(1.01, 1),
-            title="Disease Gene Status",
-            labels=labels,
-            title_fontsize=20,
-            fontsize=20,
-        )
-
-        image_name = f"fig5a-diseasegene-hist-binary-count-{date_name}"
-        if DO_PLOT:
-            plt.savefig(f"{image_name}.png", bbox_inches="tight")
-            plt.savefig(f"{image_name}.pdf", bbox_inches="tight")
-
-            plt.show()
-
-
-# Fig5 Hist for b:Proportion - Eras by OMIM Disease & Non-Disease Status
-
-
-for hist_config in ["evolutionary_category", "evolutionary_category_3era"]:
-
-    era_str = "5_era"
-    if "3era" in hist_config:
-        era_str = "3_era"
-
-    for inheritance in ["disease_gene_binary_str"]:
-
-        # Overall by Disease Gene Status
-        plt.figure(figsize=(10, 8), dpi=80)
-        ax = sns.histplot(
-            data=df6_hist.sort_values(
-                by=[hist_config, inheritance], ascending=[True, False]
-            ),
-            x=hist_config,
-            stat="percent",
-            common_norm=True,
-            linewidth=1,
-            hue=inheritance,
-            multiple="fill",
-            shrink=0.5,
-            palette=simple_palette,
-        )
-
-        ax.spines["top"].set_visible(False)
-
-        labels = ["Non-Disease", "OMIM-Disease"]
-
-        xOnes, xTwos = plt.xticks()
-
-        xTwos = ["Ancient", "Metazoan", "Chordate", "Mammal", "Primate"]
-
-        if era_str == "3_era":
-            xTwos = xTwos[:3]
-
-        plt.xticks(xOnes, xTwos, size=22)
-        plt.yticks(size=20)
-        plt.xlabel("Evolutionary Category", size=36)
-        plt.ylabel("Proportion", size=32)
-        plt.legend(
-            bbox_to_anchor=(1.01, 1),
-            title="Disease Gene Status",
-            labels=labels,
-            title_fontsize=20,
-            fontsize=20,
-        )
-
-        image_name = f"fig5b-diseasegene-hist-binary-proportion-{date_name}"
-        if DO_PLOT:
-            plt.savefig(f"{image_name}.png", bbox_inches="tight")
-            plt.savefig(f"{image_name}.pdf", bbox_inches="tight")
-
-        plt.show()
 
 
 # Fig5 Hist for c:Count - Eras by OMIM Disease (split by R or D MOI) & Non-Disease Status
 
-for hist_config in ["evolutionary_category", "evolutionary_category_3era"]:
+for hist_config in ["evolutionary_category_3era"]:
 
-    era_str = "5_era"
-    if "3era" in hist_config:
-        era_str = "3_era"
+    era_str = "3_era"
 
     for inheritance in ["disease_gene_inheritance_merged"]:
 
@@ -531,11 +414,9 @@ for hist_config in ["evolutionary_category", "evolutionary_category_3era"]:
 
 # Histogram for d:Proportion - Eras by OMIM Disease (split by Recessive or Dominant MOI) & Non-Disease Status
 
-for hist_config in ["evolutionary_category", "evolutionary_category_3era"]:
+for hist_config in ["evolutionary_category_3era"]:
 
-    era_str = "5_era"
-    if "3era" in hist_config:
-        era_str = "3_era"
+    era_str = "3_era"
 
     for inheritance in ["disease_gene_inheritance_merged"]:
 
@@ -587,145 +468,9 @@ for hist_config in ["evolutionary_category", "evolutionary_category_3era"]:
         plt.show()
 
 
-# Histogram for e:Count -
-# Eras (3 & 5) by OMIM Disease (split by R/D and Sex-Linked Status) & Non-Disease Status
-
-for hist_config in ["evolutionary_category", "evolutionary_category_3era"]:
-
-    era_str = "5_era"
-    if "3era" in hist_config:
-        era_str = "3_era"
-
-    for inheritance in ["disease_gene_inheritance_publication"]:
-
-        # Overall by Disease Gene Status
-        plt.figure(figsize=(10, 8), dpi=80)
-        ax = sns.histplot(
-            data=df6_hist.sort_values(by=[hist_config], ascending=[True]),
-            x=hist_config,
-            stat="count",
-            common_norm=False,
-            linewidth=1,
-            hue=inheritance,
-            multiple="stack",
-            palette=disease_palette,
-            hue_order=[
-                "XLD",
-                "XLR",
-                "Non-Disease Sex-Linked",
-                "AD",
-                "AR",
-                "Non-Disease Autosomal",
-            ],
-        )
-
-        ax.spines["top"].set_visible(False)
-
-        labels = [
-            "Non-Disease Autosomal",
-            "AR",
-            "AD",
-            "Non-Disease Sex-Linked",
-            "XLR",
-            "XLD",
-        ]
-
-        xOnes, xTwos = plt.xticks()
-
-        xTwos = ["Ancient", "Metazoan", "Chordate", "Mammal", "Primate"]
-
-        if era_str == "3_era":
-            xTwos = xTwos[:3]
-
-        plt.xticks(xOnes, xTwos, size=20)
-        plt.yticks(size=20)
-        plt.xlabel("Evolutionary Category", size=36)
-        plt.ylabel("Count", size=32)
-        plt.legend(
-            bbox_to_anchor=(1.01, 1),
-            title="Disease Gene Status",
-            labels=labels,
-            title_fontsize=20,
-            fontsize=20,
-        )
-
-        image_name = f"fig5e-diseasegene-hist-sexlinked-count-revision-{date_name}"
-        if DO_PLOT:
-            plt.savefig(f"{image_name}.png", bbox_inches="tight")
-            plt.savefig(f"{image_name}.pdf", bbox_inches="tight")
-
-        plt.show()
 
 
-# Fig5 Hist for d:Proportion -
-# Eras (3 & 5) by OMIM Disease (split by R/D and Sex-Linked Status) & Non-Disease Status
 
-for hist_config in ["evolutionary_category", "evolutionary_category_3era"]:
-
-    era_str = "5_era"
-    if "3era" in hist_config:
-        era_str = "3_era"
-
-    for inheritance in ["disease_gene_inheritance_publication"]:
-
-        # Overall by Disease Gene Status
-        plt.figure(figsize=(10, 8), dpi=80)
-        ax = sns.histplot(
-            data=df6_hist.sort_values(by=[hist_config], ascending=[True]),
-            x=hist_config,
-            stat="proportion",
-            common_norm=True,
-            linewidth=1,
-            hue=inheritance,
-            multiple="fill",
-            palette=disease_palette,
-            shrink=0.8,
-            hue_order=[
-                "XLD",
-                "XLR",
-                "Non-Disease Sex-Linked",
-                "AD",
-                "AR",
-                "Non-Disease Autosomal",
-            ],
-        )
-
-        ax.spines["top"].set_visible(False)
-
-        labels = [
-            "Non-Disease Autosomal",
-            "AR",
-            "AD",
-            "Non-Disease Sex-Linked",
-            "XLR",
-            "XLD",
-        ]
-
-        xOnes, xTwos = plt.xticks()
-
-        xTwos = ["Ancient", "Metazoan", "Chordate", "Mammal", "Primate"]
-
-        if era_str == "3_era":
-            xTwos = xTwos[:3]
-
-        plt.xticks(xOnes, xTwos, size=20)
-        plt.yticks(size=20)
-        plt.xlabel("Evolutionary Category", size=36)
-        plt.ylabel("Proportion", size=32)
-        plt.legend(
-            bbox_to_anchor=(1.01, 1),
-            title="Disease Gene Status",
-            labels=labels,
-            title_fontsize=20,
-            fontsize=20,
-        )
-
-        image_name = f"fig5f-diseasegene-hist-sexlinked-proportion-revision-{date_name}"
-        if DO_PLOT:
-            plt.savefig(f"{image_name}.png", bbox_inches="tight")
-            plt.savefig(f"{image_name}.pdf", bbox_inches="tight")
-
-        plt.show()
 
 
 # Status for if a gene is on an autosomal chromosome or a sex-linked chromosome
@@ -837,100 +582,13 @@ if DO_PLOT:
 plt.show()
 
 
-## Histogram Work
-
+# Histogram work by genomic location - by chromosome and by 10MB bin
 # Setting up some count for Chromosomes, since Integer Sorting =/= String Sorting
 df6_hist_autosomal["smart_chr"] = [
     int(xi.replace("chr", "").replace("X", "23").replace("Y", "24"))
     for xi in df6_hist_autosomal["chr"]
 ]
 
-
-# Plot Disease Gene Status Counts by Chromosome - Count
-
-plt.figure(figsize=(10, 8), dpi=80)
-ax = sns.histplot(
-    data=df6_hist_autosomal.sort_values(
-        by=["smart_chr", "autosomal_priority", hist_config, inheritance],
-        ascending=[True, False, True, True],
-    ),
-    x="chr",
-    stat="count",
-    linewidth=1,
-    hue=inheritance,
-    multiple="stack",
-    palette=disease_palette,
-    shrink=0.75,
-)
-
-ax.spines["top"].set_visible(False)
-
-
-labels = ["Non-Disease", "Recessive", "Dominant"]
-
-plt.xticks(size=16, rotation=-90)
-plt.yticks(size=20)
-plt.xlabel("Chromosome", size=32)
-plt.ylabel("Count", size=32)
-plt.legend(
-    bbox_to_anchor=(1.01, 1),
-    title="Disease Gene Status",
-    labels=labels,
-    title_fontsize=20,
-    fontsize=20,
-)
-
-image_name = f"fig7a-diseasegene-hist-chromosome-count-{date_name}"
-if DO_PLOT:
-    plt.savefig(f"{image_name}.png", bbox_inches="tight")
-    plt.savefig(f"{image_name}.pdf", bbox_inches="tight")
-
-
-plt.show()
-
-
-# Plot Disease Gene Status by Chromosomeal Makeup - Proportion
-
-plt.figure(figsize=(10, 8), dpi=80)
-ax = sns.histplot(
-    data=df6_hist_autosomal.sort_values(
-        by=["smart_chr", "autosomal_priority", hist_config, inheritance],
-        ascending=[True, False, True, True],
-    ),
-    x="chr",
-    stat="percent",
-    linewidth=1,
-    hue=inheritance,
-    multiple="fill",
-    common_norm=True,
-    palette=disease_palette,
-    shrink=0.75,
-)
-
-ax.spines["top"].set_visible(False)
-
-
-labels = ["Non-Disease", "Recessive", "Dominant"]
-
-plt.xticks(size=16, rotation=-90)
-plt.yticks(size=20)
-plt.xlabel("Chromosome", size=32)
-plt.ylabel("Proportion", size=32)
-plt.title("Chromosome Make-Up by\nDisease Gene Status", size=32, pad=20)
-plt.legend(
-    bbox_to_anchor=(1.01, 1),
-    title="Disease Gene Status",
-    labels=labels,
-    title_fontsize=20,
-    fontsize=20,
-)
-
-image_name = f"fig7b-diseasegene-hist-chromosome-proportion-{date_name}"
-if DO_PLOT:
-    plt.savefig(f"{image_name}.png", bbox_inches="tight")
-    plt.savefig(f"{image_name}.pdf", bbox_inches="tight")
-
-plt.show()
 
 
 # Plot Disease Gene Status by Chromosomeal Makeup - Proportion - WITH total trend line
@@ -1111,7 +769,7 @@ bin_count_frame = df6_hist_deindex["10MB_bin"].value_counts().to_frame()
 # DataFrame of Age Breakdown within each bin
 age_data = (
     df6_hist_deindex[df6_hist_deindex.is_end == False]
-    .value_counts(["10MB_bin", "evolutionary_category", "evolutionary_category_3era"])
+    .value_counts(["10MB_bin", "evolutionary_category_3era"])
     .to_frame()
     .reset_index()
 )
@@ -1121,15 +779,10 @@ age_data = (
 pivot_bin_age = pd.pivot(
     age_data.reset_index(drop=True),
     index="10MB_bin",
-    columns=["evolutionary_category"],
+    columns=["evolutionary_category_3era"],
     values="count",
 ).fillna(0.0)
 pivot_bin_age["sum"] = pivot_bin_age.sum(axis=1)
-
-# Counts for anything either Chordate, Mammal, or Primate
-pivot_bin_age["3-Chordate-Or-Younger"] = (
-    pivot_bin_age["3-Chordate"] + pivot_bin_age["4-Mammal"] + pivot_bin_age["5-Primate"]
-)
 
 
 # Also calculate the proportion of each evolutionary category within each bin
@@ -1304,27 +957,9 @@ if True:
 plt.show()
 
 
-# Transformations and adjustments before plotting by Evolutioinary Category
-era_five_colours["2-Metazoan"] = era_five_colours["2-Metazoa"]
-
 df6_hist_deindex = df6_hist_deindex.sort_values(
     by="evolutionary_category", ascending=True
 )
-
-
-# Some additional and alternative color work
-viridis_palette = sns.color_palette("viridis", 10)
-muted_palette = sns.color_palette("muted", 10)
-colorblind_palette = sns.color_palette("colorblind", 10)
-
-alternative_palette = {
-    "1-Ancient": muted_palette[2],
-    "2-Metazoan": muted_palette[1],
-    "3-Chordate": muted_palette[0],
-    "4-Mammal": muted_palette[6],
-    "5-Primate": colorblind_palette[-2],
-}
-
 
 # Chromosome length reference
 

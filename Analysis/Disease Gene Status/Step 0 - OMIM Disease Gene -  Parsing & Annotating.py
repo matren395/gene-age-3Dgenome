@@ -135,6 +135,7 @@ transEnsp.set_index("ENSP", inplace=True)
 
 
 # Table S1A from the gene-age-3Dgenome publication, as a source to annotate data onto
+# Containing information on all genes and their ages, with coordinates in hg19
 s1a = pd.read_excel("/Users/marten/Downloads/Table_S1.xlsm", skiprows=4)
 s1a_origin = s1a.copy()
 s1a = s1a.set_index("Protein_ID").join(transEnsp)
@@ -204,9 +205,9 @@ s1a_ENSG = s1a_ENSG.set_index("Protein_ID")
 s1a_ENSG = s1a_ENSG.drop("moi", axis=1)
 
 
-# Annotate disease status information onto tables with synteny data as well
-# This work is similar to the work done above
-
+# Table from the gene-age-3Dgenome publication, as a source to annotate data onto
+# Containing expression information in 6 tissue categories, SeqSim age, and Synteny age
+# With coordinates in GRCh38
 s3a = pd.read_csv(
     "~/Serious_Work/Batch_Scripts/unannotated-genes-with-all/Tables S3/tables_3a_marten_synteny_20241007.tsv",
     sep="\t",
