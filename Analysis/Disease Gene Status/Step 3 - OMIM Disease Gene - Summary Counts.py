@@ -80,15 +80,13 @@ df5["evolutionary_category_3era"] = [
 
 
 # Only work with relevant genes
-# None unannotated, mixed phenotypes, etc.
+# Not working with unannotated genes or intergenic controls
+# Further, not working with: genes with digenic MOIs, mixed AD/AR MOIs, or mixed XLD/XLR MOIs
 
 df5_nonexcl = df5[df5.GRCh38_Expression_Plotting == True]
 df5_nonexcl["Autosomal_Status"] = [
     "Sex-Linked" if xi in ["chrX", "chrY"] else "Autosomal" for xi in df5_nonexcl["chr"]
 ]
-
-
-display(df5_nonexcl)
 
 
 # Create DataFrame prepared for melting
@@ -346,9 +344,8 @@ table_6 = value_count_builder(
 table_6.to_csv(f"Table_RS_6_5eras_{DATE_NAME}.tsv", sep="\t")
 display(table_6)
 
-
-# Table used to create returned histograms, with additional relevant annotations
-# Produced in Step 2
+# Reading in table - produced in step 2 - used to create the returned histograms
+# Adding relevant information and annotations
 
 df6_hist = pd.read_csv("histogram_working_table.tsv", sep="\t").sort_values(
     by="smart_chr"
@@ -389,7 +386,7 @@ chromosome_lengths = {
 }
 
 
-# Disease Counts and Makeup per Contig
+# Disease Counts and Makeup per Contig - by Dominant, Recessive, and Non-Disease
 chr_sum_nongerm = df6_hist[["chr"]].value_counts().sort_index().to_dict()
 
 chr_sum_nongerm_counts = (
@@ -423,7 +420,7 @@ chr_sum_nongerm_counts.sort_values(by="contig").to_csv(
 )
 
 
-# Disease Counts and Makeup per Contig
+# Disease Counts and Makeup per Contig - by Disease and Non-Disease
 chr_sum_nongerm_binary = df6_hist[["chr"]].value_counts().sort_index().to_dict()
 
 chr_sum_nongerm_counts_binary = (
@@ -531,7 +528,6 @@ for xi, yi in bin_sum_nongerm_counts.iterrows():
     )
     bin_sum_nongerm_counts.loc[xi, "bin_num"] = float(xi[0].split(":")[-1])
 
-# bin_sum_nongerm_counts
 with pd.option_context(
     "display.max_rows",
     None,
@@ -572,7 +568,6 @@ for xi, yi in bin_sum_nongerm_counts_era.iterrows():
     )
     bin_sum_nongerm_counts_era.loc[xi, "bin_num"] = float(xi[0].split(":")[-1])
 
-# bin_sum_nongerm_counts
 with pd.option_context(
     "display.max_rows",
     None,
@@ -636,91 +631,65 @@ ends_idx = ends.set_index("bin_name")
 display(ends_idx)
 
 
-# Calculate scaled differences per 10MB bin - including end bins
-# Additional Counts - releative differences per bin
-
-# (R-D) / (R+D)
-# or (NonDisease-Disease) / (NonDisease + Disease)
+# Calculate counts per 10MB bin - including end bins
 
 bin_sum_dict = bin_sum_nongerm_counts.to_dict()
 
-per_bin_rd_differences = {}
+per_bin_rd_counts = {}
 
 for bin_i in bin_sum_nongerm_counts.reset_index(drop=False)["10MB_bin"].unique():
 
-    per_bin_rd_differences[bin_i] = {}
+    per_bin_rd_counts[bin_i] = {}
 
-    per_bin_rd_differences[bin_i]["contig"] = bin_sum_dict["contig"][
-        bin_i, "Non-Disease"
-    ]
-    per_bin_rd_differences[bin_i]["bin_num"] = bin_sum_dict["bin_num"][
-        bin_i, "Non-Disease"
-    ]
-    per_bin_rd_differences[bin_i]["is_end"] = bin_i in list(ends.bin_name)
+    per_bin_rd_counts[bin_i]["contig"] = bin_sum_dict["contig"][bin_i, "Non-Disease"]
+    per_bin_rd_counts[bin_i]["bin_num"] = bin_sum_dict["bin_num"][bin_i, "Non-Disease"]
+    per_bin_rd_counts[bin_i]["is_end"] = bin_i in list(ends.bin_name)
 
-    if not per_bin_rd_differences[bin_i]["is_end"]:
-        per_bin_rd_differences[bin_i]["length"] = 10_000_000
+    if not per_bin_rd_counts[bin_i]["is_end"]:
+        per_bin_rd_counts[bin_i]["length"] = 10_000_000
     else:
-        per_bin_rd_differences[bin_i]["length"] = ends_idx.loc[bin_i, "length"]
+        per_bin_rd_counts[bin_i]["length"] = ends_idx.loc[bin_i, "length"]
 
     # Dominant
     try:
-        per_bin_rd_differences[bin_i]["dominant"] = bin_sum_dict["count"][
-            bin_i, "Dominant"
-        ]
+        per_bin_rd_counts[bin_i]["dominant"] = bin_sum_dict["count"][bin_i, "Dominant"]
     except:
         print("No dominant in: ", bin_i)
-        per_bin_rd_differences[bin_i]["dominant"] = 0
+        per_bin_rd_counts[bin_i]["dominant"] = 0
 
     # Recessive
     try:
-        per_bin_rd_differences[bin_i]["recessive"] = bin_sum_dict["count"][
+        per_bin_rd_counts[bin_i]["recessive"] = bin_sum_dict["count"][
             bin_i, "Recessive"
         ]
     except:
-        per_bin_rd_differences[bin_i]["recessive"] = 0
+        per_bin_rd_counts[bin_i]["recessive"] = 0
 
     # Non-Disease
     try:
-        per_bin_rd_differences[bin_i]["non-disease"] = bin_sum_dict["count"][
+        per_bin_rd_counts[bin_i]["non-disease"] = bin_sum_dict["count"][
             bin_i, "Non-Disease"
         ]
     except:
         #         print('No dominant in: ',bin_i)
-        per_bin_rd_differences[bin_i]["non-disease"] = 0
+        per_bin_rd_counts[bin_i]["non-disease"] = 0
 
     try:
-        per_bin_rd_differences[bin_i]["recessive"] = bin_sum_dict["count"][
+        per_bin_rd_counts[bin_i]["recessive"] = bin_sum_dict["count"][
             bin_i, "Recessive"
         ]
     except:
-        per_bin_rd_differences[bin_i]["recessive"] = 0
+        per_bin_rd_counts[bin_i]["recessive"] = 0
 
-    r_i = per_bin_rd_differences[bin_i]["recessive"]
-    d_i = per_bin_rd_differences[bin_i]["dominant"]
+    r_i = per_bin_rd_counts[bin_i]["recessive"]
+    d_i = per_bin_rd_counts[bin_i]["dominant"]
     total_disease = r_i + d_i
 
-    nd_i = per_bin_rd_differences[bin_i]["non-disease"]
-
-    try:
-        per_bin_rd_differences[bin_i]["RD Scaled Difference"] = (r_i - d_i) / (
-            total_disease
-        )
-    except:
-        per_bin_rd_differences[bin_i]["RD Scaled Difference"] = None
-
-    try:
-        per_bin_rd_differences[bin_i]["Non-Disease Scaled Difference"] = (
-            nd_i - total_disease
-        ) / (nd_i + total_disease)
-    except:
-        per_bin_rd_differences[bin_i]["Non-Disease Scaled Difference"] = None
-
-    print("Not applicable for: ", bin_i)
+    nd_i = per_bin_rd_counts[bin_i]["non-disease"]
 
 
 # Starting logic for writing tables for our 10MB bin data
-table_13 = pd.DataFrame.from_dict(per_bin_rd_differences, orient="index").sort_values(
+table_13 = pd.DataFrame.from_dict(per_bin_rd_counts, orient="index").sort_values(
     by=["contig", "bin_num"]
 )
 
@@ -810,82 +779,69 @@ table_13_export = table_13.sort_values(by=["contig", "bin_num"])[
 ]
 
 
-# Calculate the above scaled differences per Contig
-
-# (R-D) / (R+D)
-# or (NonDisease-Disease) / (NonDisease + Disease)
+# Calculate counts per Contig
 
 chr_sum_dict = chr_sum_nongerm_counts.to_dict()
-chr_sum_dict
 
-per_chr_differences = {}
+per_chr_counts = {}
 
 for chr_i in chr_sum_nongerm_counts.reset_index(drop=False)["chr"].unique():
 
-    per_chr_differences[chr_i] = {}
+    per_chr_counts[chr_i] = {}
 
-    per_chr_differences[chr_i]["contig"] = chr_sum_dict["contig"][chr_i, "Non-Disease"]
+    per_chr_counts[chr_i]["contig"] = chr_sum_dict["contig"][chr_i, "Non-Disease"]
 
     # Dominant
     try:
-        per_chr_differences[chr_i]["dominant"] = chr_sum_dict["count"][
-            chr_i, "Dominant"
-        ]
+        per_chr_counts[chr_i]["dominant"] = chr_sum_dict["count"][chr_i, "Dominant"]
     except:
         print("No dominant in: ", chr_i)
-        per_chr_differences[chr_i]["dominant"] = 0
+        per_chr_counts[chr_i]["dominant"] = 0
 
     # Recessive
     try:
-        per_chr_differences[chr_i]["recessive"] = chr_sum_dict["count"][
-            chr_i, "Recessive"
-        ]
+        per_chr_counts[chr_i]["recessive"] = chr_sum_dict["count"][chr_i, "Recessive"]
     except:
-        per_chr_differences[chr_i]["recessive"] = 0
+        per_chr_counts[chr_i]["recessive"] = 0
 
     # Non-Disease
     try:
-        per_chr_differences[chr_i]["non-disease"] = chr_sum_dict["count"][
+        per_chr_counts[chr_i]["non-disease"] = chr_sum_dict["count"][
             chr_i, "Non-Disease"
         ]
     except:
         #         print('No dominant in: ',chr_i)
-        per_chr_differences[chr_i]["non-disease"] = 0
+        per_chr_counts[chr_i]["non-disease"] = 0
 
     try:
-        per_chr_differences[chr_i]["recessive"] = chr_sum_dict["count"][
-            chr_i, "Recessive"
-        ]
+        per_chr_counts[chr_i]["recessive"] = chr_sum_dict["count"][chr_i, "Recessive"]
     except:
         per_chr_differences[chr_i]["recessive"] = 0
 
-    r_i = per_chr_differences[chr_i]["recessive"]
-    d_i = per_chr_differences[chr_i]["dominant"]
+    r_i = per_chr_counts[chr_i]["recessive"]
+    d_i = per_chr_counts[chr_i]["dominant"]
     total_disease = r_i + d_i
 
-    nd_i = per_chr_differences[chr_i]["non-disease"]
+    nd_i = per_chr_counts[chr_i]["non-disease"]
 
     try:
-        per_chr_differences[chr_i]["RD Scaled Difference"] = (r_i - d_i) / (
-            total_disease
-        )
+        per_chr_counts[chr_i]["RD Scaled Difference"] = (r_i - d_i) / (total_disease)
     except:
-        per_chr_differences[chr_i]["RD Scaled Difference"] = None
+        per_chr_counts[chr_i]["RD Scaled Difference"] = None
 
     try:
-        per_chr_differences[chr_i]["Non-Disease Scaled Difference"] = (
+        per_chr_counts[chr_i]["Non-Disease Scaled Difference"] = (
             nd_i - total_disease
         ) / (nd_i + total_disease)
     except:
-        per_chr_differences[chr_i]["Non-Disease Scaled Difference"] = None
+        per_chr_counts[chr_i]["Non-Disease Scaled Difference"] = None
 
     # print('Not applicable for: ',chr_i)
 
 
-table_13_chr = pd.DataFrame.from_dict(per_chr_differences, orient="index").sort_values(
+table_13_chr = pd.DataFrame.from_dict(per_chr_counts, orient="index").sort_values(
     by=["contig"]
 )
-display(table_13_chr)
 table_13_chr.to_csv(f"Table_RS_Fig13_chromosome_{DATE_NAME}.tsv", sep="\t")
 
 
