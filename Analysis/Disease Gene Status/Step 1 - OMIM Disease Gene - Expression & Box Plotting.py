@@ -391,7 +391,7 @@ for config in ["evolutionary_category"]:
 
 # PLOT SET 2 - Mean Counts by Germ Layer, Split by Disease Gene Status
 # (flipped version of set #1)
-# ^^ b - with only 3 statuses
+# ^^ b - with only 3 statuses: Non-Disease, Recessive, and Dominant
 
 for config in ["evolutionary_category"]:
 
@@ -518,7 +518,7 @@ if DO_PLOT:
 plt.show()
 
 
-# PLOT SET 3 - Total Brain - b:for only 3 statuses
+# PLOT SET 3 - Total Brain - b:for only 3 statuses (Non-Disease, Recessive, and Dominant)
 
 df6_temp = df6[df6.Germ == "1-Brain"]
 df6_temp = df6_temp.sort_values(by=["priority", config, "Germ"])

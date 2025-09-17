@@ -589,8 +589,7 @@ bin_sum_nongerm_counts_era.to_csv(f"Table_RS_Fig8_bin_era_{DATE_NAME}.tsv", sep=
 display(bin_sum_nongerm_counts)
 
 
-# We do not include End Bins (with length less than 10MB) in our 10MB localization plots for consistency
-# Using a collaborator's binning results as a starting point to establish this
+# Do not include End Bins (with length less than 10MB) in 10MB localization plots for consistency
 # Proofed and validated elsewhere and later on.
 
 # This contains all of the 10MB bins and coordinates we will be working with, generated from the same data
@@ -602,7 +601,7 @@ ten_mb_density["end"] = False
 
 chr_keys = list(chromosome_lengths.keys())
 
-# For each of our bins (10MB across the whole chromosome)
+# For each bin (10MB across the whole chromosome)
 for xi, yi in ten_mb_density.iterrows():
 
     # If this is the first bin of the chromosome)
@@ -774,7 +773,7 @@ for contig_i in table_13.contig.unique():
             print("missing filled in!")
 
 
-# Median does not need to be explicitly calculated, but for funsies
+# Median does not need to be explicitly calculated
 table_13["total_genes"] = (
     table_13.dominant + table_13.recessive + table_13["non-disease"]
 )
@@ -922,7 +921,6 @@ chr_sum_nongerm_counts.sort_values(by="contig").to_csv(
 
 # additional table, by sex-linked status as well
 # Summarize results for 3 Eras with Disease Information (without sex linked details)
-# For figure 1b
 
 df5_nonexcl_germy = df5_nonexcl[
     [

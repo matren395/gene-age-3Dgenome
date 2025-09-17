@@ -48,7 +48,7 @@ def sig_table(
                     y1 = tissue_input[y1_idx]
                     # print(x1,x2)
                     # print(y1,y2)
-                    # y1 and y2 iterate over all combinations of tissue-group labels.
+                    # y1 and y2 iterate over all combinations of knockout-group labels.
                     if verbose:
                         print(f"comparing ({x1},{y1}) to ({x2},{y2})")
                     if (x1 == x2) and (y1 == y2):

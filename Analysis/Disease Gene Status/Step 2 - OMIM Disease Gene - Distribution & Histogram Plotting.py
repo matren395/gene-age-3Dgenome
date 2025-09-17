@@ -357,11 +357,11 @@ df6_hist["disease_gene_binary_str"] = [
 ]
 
 
-# Extremely basic palette for only plotting disease or non-disease
+# Basic palette for only plotting disease or non-disease
 simple_palette = {"OMIM-Disease": disease_palette["Dominant"], "Non-Disease": "yellow"}
 
 
-# Histogram for Counts by Eras (3 & 5) by OMIM Disease & Non-Disease Status
+# Histogram for Counts by Eras by OMIM Disease & Non-Disease Status
 
 for hist_config in ["evolutionary_category", "evolutionary_category_3era"]:
 
@@ -416,7 +416,7 @@ for hist_config in ["evolutionary_category", "evolutionary_category_3era"]:
             plt.show()
 
 
-# Fig5 Hist for b:Proportion - Eras (3 & 5) by OMIM Disease & Non-Disease Status
+# Fig5 Hist for b:Proportion - Eras by OMIM Disease & Non-Disease Status
 
 
 for hist_config in ["evolutionary_category", "evolutionary_category_3era"]:
@@ -474,7 +474,7 @@ for hist_config in ["evolutionary_category", "evolutionary_category_3era"]:
         plt.show()
 
 
-# Fig5 Hist for c:Count - Eras (3 & 5) by OMIM Disease (split by R or D MOI) & Non-Disease Status
+# Fig5 Hist for c:Count - Eras by OMIM Disease (split by R or D MOI) & Non-Disease Status
 
 for hist_config in ["evolutionary_category", "evolutionary_category_3era"]:
 
@@ -529,7 +529,7 @@ for hist_config in ["evolutionary_category", "evolutionary_category_3era"]:
         plt.show()
 
 
-# Histogram for d:Proportion - Eras (3 & 5) by OMIM Disease (split by R or D MOI) & Non-Disease Status
+# Histogram for d:Proportion - Eras by OMIM Disease (split by Recessive or Dominant MOI) & Non-Disease Status
 
 for hist_config in ["evolutionary_category", "evolutionary_category_3era"]:
 
@@ -994,7 +994,7 @@ if True:
 plt.show()
 
 
-# BEGIN WORK ON CHROMOSOMAL LOCALIZATION PLOTS
+# CHROMOSOMAL LOCALIZATION PLOTS
 
 
 # From NCBI GRCh38
@@ -1057,8 +1057,7 @@ df6_hist_deindex["autosomal_priority"] = [
 ]
 
 
-# We do not include End Bins (with length less than 10MB) in our 10MB plots for consistency
-# Using a collaborator's binning results as a starting point to establish this
+# Do not include End Bins (with length less than 10MB) in 10MB plots for consistency
 
 # This contains all of the 10MB bins and coordinates we will be working with, generated from the same data
 ten_mb_density = pd.read_excel(
@@ -1139,7 +1138,7 @@ for xi in pivot_bin_age.columns:
     pivot_bin_age[description] = pivot_bin_age[xi] / pivot_bin_age["sum"]
 
 
-# Similarly, construct and format bin data by Dominant, Recessive, and Non-Disease Status
+# Construct and format bin data by Dominant, Recessive, and Non-Disease Status
 
 bin_data = (
     df6_hist_deindex[df6_hist_deindex.is_end == False]
@@ -1181,7 +1180,7 @@ pivot_bin = (
 pivot_bin = pivot_bin.join(pivot_bin_age.drop(["sum", "sum_proportion"], axis=1))
 
 
-# Similarly, assign a numerical value for the start of each bin within each entry on the table
+# Assign a numerical value for the start of each bin within each entry on the table
 df6_hist_deindex["smart_start"] = [
     float(xi.split(":")[1]) for xi in df6_hist_deindex["10MB_bin"]
 ]

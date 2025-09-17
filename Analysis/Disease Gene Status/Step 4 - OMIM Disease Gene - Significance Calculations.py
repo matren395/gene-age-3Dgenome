@@ -8,7 +8,7 @@ This script performs comprehensive statistical significance testing for disease 
 expression patterns across different evolutionary eras, tissue categories, and inheritance
 patterns. It generates significance tables comparing gene expression between different
 disease status groups and evolutionary categories using Mann-Whitney U tests with
-multiple hypothesis correction.
+Benjamini-Hochberg multiple hypothesis correction.
 
 The script processes OMIM disease gene data and performs pairwise comparisons across:
 - Evolutionary eras (3-era classification)
@@ -226,7 +226,7 @@ publication_map = {
     "EXCLUDED-Intergenic Control": "EXCLUDED-Intergenic Control",
 }
 
-# Actually perform the mappings
+# Perform mappings
 df5["disease_gene_inheritance_merged"] = [
     inheritance_map[dgi] for dgi in df5["disease_gene_inheritance"]
 ]
