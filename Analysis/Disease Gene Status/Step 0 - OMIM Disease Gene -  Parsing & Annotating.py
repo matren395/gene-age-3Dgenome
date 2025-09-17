@@ -37,7 +37,7 @@ disease_list = pd.read_csv(
 )
 
 
-# We do not include Phenotypes denoted with ?, [, or {
+# Analysis does not include Phenotypes denoted with ?, [, or {
 # Analysis does not include digenic modes of inheritance
 # And classifies X-Linked as a type of X-Linked Dominant (for comparisons to Autosomal)
 disease_list["Phenotype_Start"] = [xi[0] for xi in disease_list.Phenotypes]
@@ -137,7 +137,7 @@ transEnsp = translationDict.copy()
 transEnsp.set_index("ENSP", inplace=True)
 
 
-# Table S1A from the 3DG publication, as a source to annotate data onto
+# Table S1A from the gene-age-3Dgenome publication, as a source to annotate data onto
 s1a = pd.read_excel("/Users/marten/Downloads/Table_S1.xlsm", skiprows=4)
 s1a_origin = s1a.copy()
 s1a = s1a.set_index("Protein_ID").join(transEnsp)
@@ -155,7 +155,7 @@ omim_join = disease_list[
     ]
 ]
 
-# Our analysis is not phenotype-specific, only MOI
+# Analysis is not phenotype-specific, only MOI
 omim_join = (
     omim_join.groupby(omim_join.index)[
         [
