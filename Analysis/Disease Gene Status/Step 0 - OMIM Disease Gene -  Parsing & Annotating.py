@@ -60,7 +60,6 @@ grouped_list = grouped_list[grouped_list.moi_counts > 1]
 
 # Sorted set, for consistency and to see what counts we have
 grouped_list["moi_sorted_set"] = [list(set(sorted(xi))) for xi in grouped_list.moi]
-grouped_list["moi_sorted_set"].value_counts()
 
 
 # Defined Mixed MOI for later classifications as "mixed sex-linked" or so on
@@ -81,7 +80,6 @@ disease_list["mixed_phenotypes"] = [
 ]
 
 disease_list["moi"] = disease_list["moi"].replace("AD/AR", "AD/AR MOI")
-disease_list.value_counts(["moi", "mixed_phenotypes"])
 
 
 # Annotate properly mixed MOIs
@@ -99,7 +97,6 @@ disease_list = disease_list[~disease_list["Ensembl Gene ID"].isna()]
 disease_list = disease_list.set_index("Ensembl Gene ID")
 # Binary to be used later - for if a gene is associated with any disease, regardless of moi
 disease_list["disease_gene_binary"] = True
-display(disease_list)
 
 
 ## Set up Translation Dictionaries
@@ -141,7 +138,6 @@ transEnsp.set_index("ENSP", inplace=True)
 s1a = pd.read_excel("/Users/marten/Downloads/Table_S1.xlsm", skiprows=4)
 s1a_origin = s1a.copy()
 s1a = s1a.set_index("Protein_ID").join(transEnsp)
-display(s1a)
 
 
 # Filter to only relevant columns for later joining
@@ -176,12 +172,10 @@ omim_join["disease_gene_binary"] = True
 
 # Only join by ENSG
 s1a_ENSG = s1a.reset_index(drop=False).set_index("ENSG").join(omim_join)
-display(s1a_ENSG)
 
 
 # Binary is True if a gene is any sort of disease gene
 s1a_ENSG["disease_gene_binary"] = [xi == True for xi in s1a_ENSG["disease_gene_binary"]]
-display(s1a_ENSG)
 
 
 # Further annotations - descriptive notes for Non-Disease Genes
@@ -210,8 +204,8 @@ s1a_ENSG = s1a_ENSG.set_index("Protein_ID")
 s1a_ENSG = s1a_ENSG.drop("moi", axis=1)
 
 
-## Now for S3A Deliverables
-# Essentially same work as above
+# Annotate disease status information onto tables with synteny data as well
+# This work is similar to the work done above
 
 s3a = pd.read_csv(
     "~/Serious_Work/Batch_Scripts/unannotated-genes-with-all/Tables S3/tables_3a_marten_synteny_20241007.tsv",
@@ -230,12 +224,8 @@ s3a_ENSG = (
 )
 
 s3a_ENSG["disease_gene_binary"] = [xi == True for xi in s3a_ENSG["disease_gene_binary"]]
-s3a_ENSG
 
-s3a_ENSG
-
-
-# Annotater details about non-disease on
+# Add details about non-disease genes as well
 
 s3a_ENSG_q = s3a_ENSG.reset_index(drop=False)
 
@@ -264,8 +254,6 @@ for xi, yi in s3a_ENSG_q.iterrows():
 
 s3a_ENSG_q = s3a_ENSG_q.drop("moi", axis=1).set_index("Identifier")
 
-s3a_ENSG_q
-
 
 # Excluded & Plotted Logic
 # For future decisions to not plot Mixed MOIs
@@ -280,12 +268,6 @@ s3a_ENSG_q["GRCh38_Expression_Plotting"] = [
     for xi in s3a_ENSG_q.disease_gene_inheritance
 ]
 
-s3a_ENSG_q["Excluded"].value_counts()
-
-s3a_ENSG_q["GRCh38_Expression_Plotting"].value_counts()
-
-s3a_ENSG_q.value_counts(["Excluded", "GRCh38_Expression_Plotting"]).sort_index()
-
 
 s1a_ENSG["Excluded"] = ["EXCLUDED" in xi for xi in s1a_ENSG.disease_gene_inheritance]
 
@@ -293,12 +275,6 @@ s1a_ENSG["GRCh38_Expression_Plotting"] = [
     not any(["AD/AR" in xi, "EXCLUDED" in xi, "Mixed" in xi])
     for xi in s1a_ENSG.disease_gene_inheritance
 ]
-
-s1a_ENSG["Excluded"].value_counts()
-
-s1a_ENSG["GRCh38_Expression_Plotting"].value_counts()
-
-s1a_ENSG.value_counts(["Excluded", "GRCh38_Expression_Plotting"]).sort_index()
 
 
 s3a_ENSG_q.to_csv("marten_s3a_omimdisease_20250314.tsv", sep="\t")
