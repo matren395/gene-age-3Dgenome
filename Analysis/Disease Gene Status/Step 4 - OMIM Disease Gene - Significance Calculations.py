@@ -486,11 +486,8 @@ df_disease_joint_simple_sexsplit = df_disease_joint[
 
 # Read knockout significance data and export combined results
 
-knockout = pd.read_csv("~/ug-gc/marten_knockout_era_significance.tsv", sep="\t")
-
 with pd.ExcelWriter("Table_Significance_ErrorReWrite.xlsx") as writer:
     df_disease_joint_simple.to_excel(writer, sheet_name="Disease")
     df_disease_joint_era.to_excel(writer, sheet_name="Era_Disease")
     df_disease_joint_simple_sexsplit.to_excel(writer, sheet_name="SXLDisease")
     df_disease_joint_era_sexsplit.to_excel(writer, sheet_name="Era_SXLDisease")
-    knockout.to_excel(writer, sheet_name="Knockout")

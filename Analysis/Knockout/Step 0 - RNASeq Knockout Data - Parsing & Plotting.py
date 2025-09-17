@@ -120,7 +120,8 @@ s3a_ensg = s3a[~s3a.ENSG.isna()]  # 19,283 OK
 unique_conditions = list(df_mega.Condition.unique())
 
 
-# Filter S3A to ENSGs with recorded RNA-Seq counts from the knockout experiments
+# Filter table with OMIM gene-disease associations and expression data to those with recorded RNA-Seq counts from knockout experiments
+# Done by matching gene identifiers from kncokout data to those in our original Table S1A
 s3a_ensg_choice = s3a_ensg[s3a_ensg.ENSG.isin(ensg_counts.index)]
 
 
@@ -149,57 +150,6 @@ s3a_ensg_choice_sort_ensg = s3a_ensg_choice_sort[
 ]
 
 
-# Map values for different groupings
-
-# Remove Sex-Linked Resolution
-inheritance_map = {
-    "Non-Disease": "Non-Disease",
-    "Non-Disease Sex-Linked": "Non-Disease",
-    "AD": "Dominant",
-    "XLD": "Dominant",
-    "AR": "Recessive",
-    "XLR": "Recessive",
-    "Mixed Autosomal": "Mixed Dominant-Recessive",
-    "Mixed Autosomal Digenic": "Mixed Dominant-Recessive Digenic",
-    "Mixed Sex-Linked": "Mixed Dominant-Recessive",
-    "AD/AR MOI": "AD/AR MOI",
-    "Digenic": "Digenic",
-    "EXCLUDED-Unannotated": "EXCLUDED-Unannotated",
-    "EXCLUDED-Intergenic Control": "EXCLUDED-Intergenic Control",
-}
-
-# Keep Sex-Linked split out
-publication_map = {
-    "Non-Disease": "Non-Disease Autosomal",
-    "Non-Disease Sex-Linked": "Non-Disease Sex-Linked",
-    "AD": "AD",
-    "XLD": "XLD",
-    "AR": "AR",
-    "XLR": "XLR",
-    "Mixed Autosomal": "EXCLUDED_Mixed Autosomal",
-    "Mixed Autosomal Digenic": "EXCLUDED_Mixed Autosomal Digenic",
-    "Mixed Sex-Linked": "EXCLUDED_Mixed Sex-Linked",
-    "AD/AR MOI": "EXCLUDED_AD/AR MOI",
-    "Digenic": "EXCLUDED_Digenic",
-    "EXCLUDED-Unannotated": "EXCLUDED-Unannotated",
-    "EXCLUDED-Intergenic Control": "EXCLUDED-Intergenic Control",
-}
-
-# Actually perform the mappings
-s3a_ensg_choice_sort_ensg["disease_gene_inheritance_merged"] = [
-    inheritance_map[dgi]
-    for dgi in s3a_ensg_choice_sort_ensg["disease_gene_inheritance"]
-]
-
-s3a_ensg_choice_sort_ensg["disease_gene_inheritance_publication"] = [
-    publication_map[dgi]
-    for dgi in s3a_ensg_choice_sort_ensg["disease_gene_inheritance"]
-]
-
-s3a_ensg_choice_sort_ensg["disease_gene_inheritance"] = [
-    "Non-Disease Autosomal" if xi == "Non-Disease" else xi
-    for xi in s3a_ensg_choice_sort_ensg["disease_gene_inheritance"]
-]
 
 s3a_ensg_choice_sort_ensg["evolutionary_category_3era"] = [
     xi.replace("5-Primate", "3-Chordate").replace("4-Mammal", "3-Chordate")
@@ -209,11 +159,7 @@ s3a_ensg_choice_sort_ensg["evolutionary_category_3era"] = [
 
 constants = [
     "ENSG",
-    "evolutionary_category",
-    "evolutionary_category_3era",
-    "disease_gene_inheritance",
-    "disease_gene_inheritance_merged",
-    "disease_gene_inheritance_publication",
+    "evolutionary_category_3era"
 ]
 condition_means = [f"{condition_i}_mean" for condition_i in unique_conditions]
 condition_stdevs = [f"{condition_i}_std" for condition_i in unique_conditions]
@@ -257,12 +203,12 @@ s3a_ensg_choice_minimelt["value_log_nonzero"] = np.log10(
 
 
 # Generate plots for:
-# - 3-era and 5-era configurations
-# - With and without log10 scale
+# Evolutionary category by 3 era
+# # - With and without log10 scale
 
 # Plots for relevant setups
 
-for evo_config in ["evolutionary_category_3era", "evolutionary_category"]:
+for evo_config in ["evolutionary_category_3era"]:
     for log_status in ["value", "value_log_nonzero"]:
 
         plt.figure(figsize=(12, 8), dpi=80)
@@ -285,16 +231,10 @@ for evo_config in ["evolutionary_category_3era", "evolutionary_category"]:
 
         xfont = 26
 
-        xTwos = ["Ancient", "Metazoan", "Chordate", "Mammal", "Primate"]
-        if evo_config == "evolutionary_category_3era":
-            xTwos = xTwos[:3]
+        xTwos = ["Ancient", "Metazoan", "Chordate"]
 
-        # labels = ['Brain','Ecto','Meso','Endo','Ovary','Testis']
-        era_text = "5era"
-        era_num = "5"
-        if evo_config == "evolutionary_category_3era":
-            era_text = "3era"
-            era_num = "3"
+        era_text = "3era"
+        era_num = "3"
 
         # print(plt.ylim())
 
@@ -324,52 +264,7 @@ for evo_config in ["evolutionary_category_3era", "evolutionary_category"]:
         plt.show()
 
 
-# Plots without evolutionary information
-
-for log_status in ["value", "value_log_nonzero"]:
-
-    plt.figure(figsize=(6, 8), dpi=80)
-    sns.boxplot(
-        data=s3a_ensg_choice_minimelt.sort_values(by="evolutionary_category"),
-        x="Count",
-        y=log_status,
-        showfliers=False,
-        linewidth=3,
-        palette=knockout_palette,
-        order=hue_order,
-    )
-    plt.xlabel("Cell Line Status", size=32)
-    plt.ylabel(
-        f"RNASeq Counts{' Log10' if log_status=='value_log_nonzero' else ''}", size=32
-    )
-    xOnes, xTwos = plt.xticks()
-
-    xfont = 26
-
-    plt.ylim((-133.80833333333334, 2809.975))
-    if log_status == "value_log_nonzero":
-        plt.ylim((-1.0614816416482264, 5.171786966172596))
-
-    plt.xticks(xOnes, xTwos, size=xfont, rotation=-90)
-    plt.yticks(size=27)
-    plt.title(
-        f"Knockout Expression {' Log10' if log_status=='value_log_nonzero' else ''}",
-        size=32,
-        pad=15,
-    )
-
-    image_name = f"knockout-expression-{'Log10' if log_status=='value_log_nonzero' else ''}_without_eras-{date_name}"
-    if do_plot:
-        plt.savefig(f"{image_name}.png", bbox_inches="tight")
-        plt.savefig(f"{image_name}.pdf", bbox_inches="tight")
-
-    plt.show()
-
-
 for setup in [
-    ["evolutionary_category_3era", "disease_gene_inheritance_merged"],
-    ["evolutionary_category", "disease_gene_inheritance_merged"],
-    ["disease_gene_inheritance_merged"],
     ["evolutionary_category_3era"],
 ]:
     temp_table = s3a_ensg_choice_sort_ensg.groupby(setup)[condition_means].describe()

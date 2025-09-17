@@ -357,8 +357,6 @@ df6_hist["disease_gene_binary_str"] = [
 simple_palette = {"OMIM-Disease": disease_palette["Dominant"], "Non-Disease": "yellow"}
 
 
-
-
 # Fig5 Hist for c:Count - Eras by OMIM Disease (split by R or D MOI) & Non-Disease Status
 
 for hist_config in ["evolutionary_category_3era"]:
@@ -466,11 +464,6 @@ for hist_config in ["evolutionary_category_3era"]:
             plt.savefig(f"{image_name}.pdf", bbox_inches="tight")
 
         plt.show()
-
-
-
-
-
 
 
 # Status for if a gene is on an autosomal chromosome or a sex-linked chromosome
@@ -588,7 +581,6 @@ df6_hist_autosomal["smart_chr"] = [
     int(xi.replace("chr", "").replace("X", "23").replace("Y", "24"))
     for xi in df6_hist_autosomal["chr"]
 ]
-
 
 
 # Plot Disease Gene Status by Chromosomeal Makeup - Proportion - WITH total trend line
