@@ -176,10 +176,11 @@ disease_palette = {
     "Non-Disease Sex-Linked": "cyan",
 }
 
-era__palette = {'1-Ancient': '#ffff00', # very yellow
- '2-Metazoa': (0.0, 0.5772549019607842, 0.0), # deep green
- '3-Chordate': '#F8766D',# salmon
- }
+era__palette = {
+    "1-Ancient": "#ffff00",  # very yellow
+    "2-Metazoa": (0.0, 0.5772549019607842, 0.0),  # deep green
+    "3-Chordate": "#F8766D",  # salmon
+}
 
 disease_palette["XLR"] = [
     xi / 256 for xi in [80, 70, 164]
@@ -238,7 +239,7 @@ for germ_i in list(df6.Germ.unique()):
 
     plt.show()
 
-    # with Sex-Linked Statuses split out 
+    # with Sex-Linked Statuses split out
     df6_temp = df6[df6.Germ == germ_i]
     df6_temp = df6_temp.sort_values(by=["priority", config, "Germ"])
 
@@ -288,9 +289,7 @@ for germ_i in list(df6.Germ.unique()):
 df6_temp = df6.sort_values(by=["priority", "Germ"]).copy()
 df6_temp["Germ"] = [germitext.split("-")[-1] for germitext in df6_temp["Germ"]]
 
-df6_temp = df6_temp[
-    ~df6_temp.disease_gene_inheritance_publication.str.contains("EXCL")
-]
+df6_temp = df6_temp[~df6_temp.disease_gene_inheritance_publication.str.contains("EXCL")]
 
 plt.figure(figsize=(16, 12), dpi=80)
 sns.boxplot(
@@ -312,9 +311,7 @@ plt.yticks(size=46)
 plt.legend(
     bbox_to_anchor=(1.01, 1), title="Disease Gene", title_fontsize=36, fontsize=32
 )
-plt.title(
-    "Tissue Mean Counts per Disease Gene Status\nby Germ Layer", size=46, pad=15
-)
+plt.title("Tissue Mean Counts per Disease Gene Status\nby Germ Layer", size=46, pad=15)
 plt.subplots_adjust(bottom=0.2, left=0.1)
 
 image_name = f"fig2b-diseasegene-germlayer-simple-{date_name}"
@@ -331,9 +328,7 @@ plt.show()
 df6_temp = df6.sort_values(by=["priority", "Germ"]).copy()
 df6_temp["Germ"] = [germitext.split("-")[-1] for germitext in df6_temp["Germ"]]
 
-df6_temp = df6_temp[
-    ~df6_temp.disease_gene_inheritance_publication.str.contains("EXCL")
-]
+df6_temp = df6_temp[~df6_temp.disease_gene_inheritance_publication.str.contains("EXCL")]
 
 plt.figure(figsize=(16, 12), dpi=80)
 sns.boxplot(
@@ -355,9 +350,7 @@ plt.yticks(size=46)
 plt.legend(
     bbox_to_anchor=(1.01, 1), title="Disease Gene", title_fontsize=36, fontsize=32
 )
-plt.title(
-    "Tissue Mean Counts per Disease Gene Status\nby Germ Layer", size=46, pad=15
-)
+plt.title("Tissue Mean Counts per Disease Gene Status\nby Germ Layer", size=46, pad=15)
 plt.subplots_adjust(bottom=0.2, left=0.1)
 
 image_name = f"fig2c-diseasegene-germlayer-sexsplit-{date_name}"
