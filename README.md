@@ -6,7 +6,7 @@ Correspondence to: nenad.sestan@yale.edu (N.S.), odonnell@broadinstitute.org (A.
 
 Distributed under the following license:
 
-Copyright 2024 O'Donnell-Luria and Erceg Labs
+Copyright 2024 Sestan, O’Donnell-Luria, and Erceg Labs
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 
