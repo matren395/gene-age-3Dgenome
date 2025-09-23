@@ -160,7 +160,7 @@ df6_hist["disease_gene_inheritance"] = [
 df6_hist["priority"] = [priority_map[xi] for xi in df6_hist.disease_gene_inheritance]
 
 
-# Histogram for disease counts by 3 and 5 eras
+# Histogram for disease counts by 3 eras
 # for all disease statuses, only recessive & dominant, & R+D split by sex chr
 
 for hist_config in ["evolutionary_category_3era"]:
@@ -247,7 +247,7 @@ for hist_config in ["evolutionary_category_3era"]:
         plt.show()
 
 
-# Histogram for Proportional Makeup by 3&5 Eras
+# Histogram for Proportional Makeup by 3 Eras
 # - for all disease statuses, only recessive & dominant, & R+D split by sex chr
 
 for hist_config in ["evolutionary_category_3era"]:
@@ -673,8 +673,6 @@ chromosome_lengths = {
     "20": 64444167,
     "21": 46709983,
     "22": 50818468,
-    "X": 156040895,
-    "Y": 57227415,
     "X": 156040895,
     "Y": 57227415,
 }

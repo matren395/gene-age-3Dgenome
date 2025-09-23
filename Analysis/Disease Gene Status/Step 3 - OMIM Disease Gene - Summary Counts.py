@@ -381,8 +381,6 @@ chromosome_lengths = {
     "22": 50818468,
     "X": 156040895,
     "Y": 57227415,
-    "X": 156040895,
-    "Y": 57227415,
 }
 
 
@@ -816,7 +814,7 @@ for chr_i in chr_sum_nongerm_counts.reset_index(drop=False)["chr"].unique():
     try:
         per_chr_counts[chr_i]["recessive"] = chr_sum_dict["count"][chr_i, "Recessive"]
     except:
-        per_chr_differences[chr_i]["recessive"] = 0
+        per_chr_counts[chr_i]["recessive"] = 0
 
     r_i = per_chr_counts[chr_i]["recessive"]
     d_i = per_chr_counts[chr_i]["dominant"]
