@@ -176,81 +176,24 @@ disease_palette = {
     "Non-Disease Sex-Linked": "cyan",
 }
 
-# Colorblind colors
-colorblind_11 = sns.color_palette("colorblind", n_colors=11)
+era__palette = {'1-Ancient': '#ffff00', # very yellow
+ '2-Metazoa': (0.0, 0.5772549019607842, 0.0), # deep green
+ '3-Chordate': '#F8766D',# salmon
+ }
 
 disease_palette["XLR"] = [
     xi / 256 for xi in [80, 70, 164]
 ]  # Custom modification of XLR for custom color
 
-
-# Work for plotting mixed statuses
-# relevant for our own work and checking
-disease_palette["AD/AR MOI"] = colorblind_11[4]
-
-disease_palette["Mixed Autosomal"] = colorblind_11[-4]
-disease_palette["Mixed Sex-Linked"] = colorblind_11[-3]
-disease_palette["Mixed Autosomal Digenic"] = colorblind_11[-2]
-
-disease_palette["Digenic"] = colorblind_11[1]
-
-disease_palette["Mixed Dominant-Recessive"] = disease_palette["Mixed Autosomal"]
-disease_palette["Mixed Dominant-Recessive Digenic"] = disease_palette[
-    "Mixed Autosomal Digenic"
-]
-
-
-# PLOT SET 1 - For all tissue categories, Mean Count by Era, split by Status
-# a - for all Status options (mixed, AD/DR)
-
+# PLOT SET 1 - Per-Tissue Category Mean Count by Era, split by Disease Status
+# for only Non-Disease, Recessive, Dominant statuses
 for germ_i in list(df6.Germ.unique()):
 
     germ_text = germ_i.split("-")[-1]
 
     config = "evolutionary_category"
 
-    df6_temp = df6[df6.Germ == germ_i]
-    df6_temp = df6_temp.sort_values(by=["priority", config, "Germ"])
-
-    plt.figure(figsize=(12, 8), dpi=80)
-    sns.boxplot(
-        data=df6_temp,
-        x=config,
-        y="Mean Count",
-        hue="disease_gene_inheritance",
-        showfliers=False,
-        linewidth=3,
-        palette=disease_palette,
-    )
-    plt.xlabel("Evolutionary Era", size=32)
-    plt.ylabel("Mean Count", size=32)
-    xOnes, xTwos = plt.xticks()
-
-    xfont = 26
-    if config == "evolutionary_category":
-        xTwos = ["Ancient", "Metazoan", "Chordate"]
-    #     lablos = ['Brain','Ecto','Meso','Endo','Ovary','Testis']
-    plt.xticks(xOnes, xTwos, size=xfont)
-    plt.yticks(size=27)
-    plt.legend(
-        title="Disease Gene", title_fontsize=22, fontsize=22, bbox_to_anchor=(1.00, 1)
-    )
-    plt.title(
-        f"{germ_text} Tissue Mean Count per Disease Gene Status\nby Evolutionary Era",
-        size=32,
-        pad=15,
-    )
-
-    image_name = f"fig1a-germstratified-{germ_text}-diseasegene-meancount-era-allstratifications-{date_name}"
-    if DO_PLOT:
-        plt.savefig(f"{image_name}.png", bbox_inches="tight")
-        plt.savefig(f"{image_name}.pdf", bbox_inches="tight")
-
-    plt.show()
-
-    # PLOT SET 1 - Tissue Category Mean Count by Era, split by Status
-    # ^^ b - for only Non-Disease, Recessive, Dominant statuses
-
+    # for only Non-Disease, Recessive, Dominant statuses
     df6_temp = df6[df6.Germ == germ_i]
     df6_temp = df6_temp.sort_values(by=["priority", config, "Germ"])
 
@@ -275,7 +218,6 @@ for germ_i in list(df6.Germ.unique()):
     xfont = 26
     if config == "evolutionary_category":
         xTwos = ["Ancient", "Metazoan", "Chordate"]
-    #     lablos = ['Brain','Ecto','Meso','Endo','Ovary','Testis']
     plt.xticks(xOnes, xTwos, size=xfont)
     plt.yticks(size=27)
     plt.legend(
@@ -295,11 +237,8 @@ for germ_i in list(df6.Germ.unique()):
         plt.savefig(f"{image_name}.pdf", bbox_inches="tight")
 
     plt.show()
-    # fig notes:
 
-    # PLOT SET 1 - Tissue Category Mean Count by Era, split by Status
-    # ^^ c - with Sex-Linked Statuses split out
-
+    # with Sex-Linked Statuses split out 
     df6_temp = df6[df6.Germ == germ_i]
     df6_temp = df6_temp.sort_values(by=["priority", config, "Germ"])
 
@@ -345,172 +284,40 @@ for germ_i in list(df6.Germ.unique()):
 
 # PLOT SET 2 - Mean Counts by Germ Layer, Split by Disease Gene Status
 # (flipped version of set #1)
-# ^^ a - with all statuses
-
-for config in ["evolutionary_category"]:
-
-    df6_temp = df6.sort_values(by=["priority", config, "Germ"]).copy()
-    df6_temp["Germ"] = [germitext.split("-")[-1] for germitext in df6_temp["Germ"]]
-    df6_temp[config] = [configii.split("-")[-1] for configii in df6_temp[config]]
-
-    if config == "evolutionary_category":
-        palette_i = [yi for xi, yi in era_five_colours.items()]
-
-    plt.figure(figsize=(26, 16), dpi=80)
-    sns.boxplot(
-        data=df6_temp,
-        x="Germ",
-        y="Mean Count",
-        hue="disease_gene_inheritance",
-        showfliers=False,
-        linewidth=3,
-        palette=palette_i,
-    )
-    plt.xlabel("Germ Layer", size=46)
-    plt.ylabel("Mean Counts", size=46)
-
-    xOnes, xTwos = plt.xticks()
-
-    plt.xticks(size=46)
-    plt.yticks(size=46)
-    plt.legend(
-        bbox_to_anchor=(1.01, 1), title="Disease Gene", title_fontsize=36, fontsize=32
-    )
-    plt.title(
-        "Tissue Mean Counts per Disease Gene Status\nby Germ Layer", size=46, pad=15
-    )
-    plt.subplots_adjust(bottom=0.2, left=0.1)
-
-    image_name = f"fig2a-diseasegene-germlayer-allstratifications-{date_name}"
-    if DO_PLOT:
-        plt.savefig(f"{image_name}.png", bbox_inches="tight")
-        plt.savefig(f"{image_name}.pdf", bbox_inches="tight")
-
-    plt.show()
-
-
-# PLOT SET 2 - Mean Counts by Germ Layer, Split by Disease Gene Status
-# (flipped version of set #1)
-# ^^ b - with only 3 statuses: Non-Disease, Recessive, and Dominant
-
-for config in ["evolutionary_category"]:
-
-    df6_temp = df6.sort_values(by=["priority", config, "Germ"]).copy()
-    df6_temp["Germ"] = [germitext.split("-")[-1] for germitext in df6_temp["Germ"]]
-    df6_temp[config] = [configii.split("-")[-1] for configii in df6_temp[config]]
-
-    df6_temp = df6_temp[
-        ~df6_temp.disease_gene_inheritance_publication.str.contains("EXCL")
-    ]
-
-    plt.figure(figsize=(16, 12), dpi=80)
-    sns.boxplot(
-        data=df6_temp,
-        x="Germ",
-        y="Mean Count",
-        hue="disease_gene_inheritance_merged",
-        showfliers=False,
-        linewidth=3,
-        palette=disease_palette,
-    )
-    plt.xlabel("Germ Layer", size=46)
-    plt.ylabel("Mean Counts", size=46)
-
-    xOnes, xTwos = plt.xticks()
-
-    plt.xticks(size=46)
-    plt.yticks(size=46)
-    plt.legend(
-        bbox_to_anchor=(1.01, 1), title="Disease Gene", title_fontsize=36, fontsize=32
-    )
-    plt.title(
-        "Tissue Mean Counts per Disease Gene Status\nby Germ Layer", size=46, pad=15
-    )
-    plt.subplots_adjust(bottom=0.2, left=0.1)
-
-    image_name = f"fig2b-diseasegene-germlayer-simple-{date_name}"
-    if DO_PLOT:
-        plt.savefig(f"{image_name}.png", bbox_inches="tight")
-        plt.savefig(f"{image_name}.pdf", bbox_inches="tight")
-
-    plt.show()
-
-
-# PLOT SET 2 - Mean Counts by Germ Layer, Split by Disease Gene Status
-# (flipped version of set #1)
-# ^^ c - with split out Sex Linked statuses
-
-for config in ["evolutionary_category"]:
-
-    df6_temp = df6.sort_values(by=["priority", config, "Germ"]).copy()
-    df6_temp["Germ"] = [germitext.split("-")[-1] for germitext in df6_temp["Germ"]]
-    df6_temp[config] = [configii.split("-")[-1] for configii in df6_temp[config]]
-
-    df6_temp = df6_temp[
-        ~df6_temp.disease_gene_inheritance_publication.str.contains("EXCL")
-    ]
-
-    plt.figure(figsize=(16, 12), dpi=80)
-    sns.boxplot(
-        data=df6_temp,
-        x="Germ",
-        y="Mean Count",
-        hue="disease_gene_inheritance_publication",
-        showfliers=False,
-        linewidth=3,
-        palette=disease_palette,
-    )
-    plt.xlabel("Germ Layer", size=46)
-    plt.ylabel("Mean Counts", size=46)
-
-    xOnes, xTwos = plt.xticks()
-
-    plt.xticks(size=46)
-    plt.yticks(size=46)
-    plt.legend(
-        bbox_to_anchor=(1.01, 1), title="Disease Gene", title_fontsize=36, fontsize=32
-    )
-    plt.title(
-        "Tissue Mean Counts per Disease Gene Status\nby Germ Layer", size=46, pad=15
-    )
-    plt.subplots_adjust(bottom=0.2, left=0.1)
-
-    if config == "evoera5":
-        config = "five_eras"
-
-    image_name = f"fig2c-diseasegene-germlayer-sexsplit-{date_name}"
-    if DO_PLOT:
-        plt.savefig(f"{image_name}.png", bbox_inches="tight")
-        plt.savefig(f"{image_name}.pdf", bbox_inches="tight")
-
-    plt.show()
-
-
-# PLOT SET 3 - Total Brain - a:for all statuses
-
-df6_temp = df6[df6.Germ == "1-Brain"]
-df6_temp = df6_temp.sort_values(by=["priority", config, "Germ"])
+# with only 3 statuses: Non-Disease, Recessive, and Dominant
+df6_temp = df6.sort_values(by=["priority", "Germ"]).copy()
 df6_temp["Germ"] = [germitext.split("-")[-1] for germitext in df6_temp["Germ"]]
 
-plt.figure(figsize=(10, 8), dpi=80)
+df6_temp = df6_temp[
+    ~df6_temp.disease_gene_inheritance_publication.str.contains("EXCL")
+]
+
+plt.figure(figsize=(16, 12), dpi=80)
 sns.boxplot(
     data=df6_temp,
-    x="disease_gene_inheritance",
+    x="Germ",
     y="Mean Count",
+    hue="disease_gene_inheritance_merged",
     showfliers=False,
     linewidth=3,
     palette=disease_palette,
 )
-plt.xlabel("Disease Gene Status", size=32)
-plt.ylabel("Mean Count", size=32)
+plt.xlabel("Germ Layer", size=46)
+plt.ylabel("Mean Counts", size=46)
+
 xOnes, xTwos = plt.xticks()
 
-xfont = 20
-plt.xticks(xOnes, xTwos, size=xfont, rotation=-90)
-plt.yticks(size=27)
-plt.title("Brain Mean Count per Disease Gene Status", size=32, pad=15)
+plt.xticks(size=46)
+plt.yticks(size=46)
+plt.legend(
+    bbox_to_anchor=(1.01, 1), title="Disease Gene", title_fontsize=36, fontsize=32
+)
+plt.title(
+    "Tissue Mean Counts per Disease Gene Status\nby Germ Layer", size=46, pad=15
+)
+plt.subplots_adjust(bottom=0.2, left=0.1)
 
-image_name = f"fig3a-diseasegene-brainmeancount-noera-allstratifications-{date_name}"
+image_name = f"fig2b-diseasegene-germlayer-simple-{date_name}"
 if DO_PLOT:
     plt.savefig(f"{image_name}.png", bbox_inches="tight")
     plt.savefig(f"{image_name}.pdf", bbox_inches="tight")
@@ -518,10 +325,53 @@ if DO_PLOT:
 plt.show()
 
 
-# PLOT SET 3 - Total Brain - b:for only 3 statuses (Non-Disease, Recessive, and Dominant)
+# PLOT SET 2 - Mean Counts by Germ Layer, Split by Disease Gene Status
+# (flipped version of set #1)
+# with split out Sex Linked statuses
+df6_temp = df6.sort_values(by=["priority", "Germ"]).copy()
+df6_temp["Germ"] = [germitext.split("-")[-1] for germitext in df6_temp["Germ"]]
 
+df6_temp = df6_temp[
+    ~df6_temp.disease_gene_inheritance_publication.str.contains("EXCL")
+]
+
+plt.figure(figsize=(16, 12), dpi=80)
+sns.boxplot(
+    data=df6_temp,
+    x="Germ",
+    y="Mean Count",
+    hue="disease_gene_inheritance_publication",
+    showfliers=False,
+    linewidth=3,
+    palette=disease_palette,
+)
+plt.xlabel("Germ Layer", size=46)
+plt.ylabel("Mean Counts", size=46)
+
+xOnes, xTwos = plt.xticks()
+
+plt.xticks(size=46)
+plt.yticks(size=46)
+plt.legend(
+    bbox_to_anchor=(1.01, 1), title="Disease Gene", title_fontsize=36, fontsize=32
+)
+plt.title(
+    "Tissue Mean Counts per Disease Gene Status\nby Germ Layer", size=46, pad=15
+)
+plt.subplots_adjust(bottom=0.2, left=0.1)
+
+image_name = f"fig2c-diseasegene-germlayer-sexsplit-{date_name}"
+if DO_PLOT:
+    plt.savefig(f"{image_name}.png", bbox_inches="tight")
+    plt.savefig(f"{image_name}.pdf", bbox_inches="tight")
+
+plt.show()
+
+
+# PLOT SET 3 - Total Brain - for only 3 statuses (Non-Disease, Recessive, and Dominant)
+# without any evolutionary era information
 df6_temp = df6[df6.Germ == "1-Brain"]
-df6_temp = df6_temp.sort_values(by=["priority", config, "Germ"])
+df6_temp = df6_temp.sort_values(by=["priority", "Germ"])
 df6_temp["Germ"] = [germitext.split("-")[-1] for germitext in df6_temp["Germ"]]
 
 df6_temp = df6_temp[~df6_temp.disease_gene_inheritance_publication.str.contains("EXCL")]
@@ -552,10 +402,9 @@ if DO_PLOT:
 plt.show()
 
 
-# PLOT SET 3 - Total Brain - c:with sex-linked statuses split out
-
+# PLOT SET 3 - Total Brain - with sex-linked statuses split out
 df6_temp = df6[df6.Germ == "1-Brain"]
-df6_temp = df6_temp.sort_values(by=["priority", config, "Germ"])
+df6_temp = df6_temp.sort_values(by=["priority", "Germ"])
 df6_temp["Germ"] = [germitext.split("-")[-1] for germitext in df6_temp["Germ"]]
 
 df6_temp = df6_temp[~df6_temp.disease_gene_inheritance_publication.str.contains("EXCL")]
@@ -573,7 +422,7 @@ plt.xlabel("Disease Gene Status", size=32)
 plt.ylabel("Mean Count", size=32)
 xOnes, xTwos = plt.xticks()
 
-xfont = 22
+xFont = 22
 # if config=='evolutionary_category':
 #     xTwos = ['Ancient','Metazoan','Chordate']
 # #     lablos = ['Brain','Ecto','Meso','Endo','Ovary','Testis']
@@ -581,7 +430,7 @@ for xi in range(len(xTwos)):
     texto = xTwos[xi].get_text()
     xTwos[xi] = texto.replace("Disease", "Disease\n")
 
-plt.xticks(xOnes, xTwos, size=xfont, rotation=-90)
+plt.xticks(xOnes, xTwos, size=xFont, rotation=-90)
 plt.yticks(size=27)
 # plt.legend(title='Neural',title_fontsize=22,fontsize=22,bbox_to_anchor=(1.00, 1))
 plt.title("Brain Mean Count per Disease Gene Status", size=32, pad=15)

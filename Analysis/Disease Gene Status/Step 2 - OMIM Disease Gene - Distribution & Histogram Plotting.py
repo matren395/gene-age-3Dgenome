@@ -115,29 +115,9 @@ disease_palette = {
     "Non-Disease Sex-Linked": "cyan",
 }
 
-
-# Colorblind colors
-colorblind_11 = sns.color_palette("colorblind", n_colors=11)
-
 disease_palette["XLR"] = [
     xi / 256 for xi in [80, 70, 164]
 ]  # Custom modification of XLR for custom color
-
-
-# Work for plotting mixed statuses
-disease_palette["AD/AR MOI"] = colorblind_11[4]
-
-disease_palette["Mixed Autosomal"] = colorblind_11[-4]
-disease_palette["Mixed Sex-Linked"] = colorblind_11[-3]
-disease_palette["Mixed Autosomal Digenic"] = colorblind_11[-2]
-
-disease_palette["Digenic"] = colorblind_11[1]
-
-disease_palette["Mixed Dominant-Recessive"] = disease_palette["Mixed Autosomal"]
-disease_palette["Mixed Dominant-Recessive Digenic"] = disease_palette[
-    "Mixed Autosomal Digenic"
-]
-
 
 # Begin custom work for Histograms & Distribution Plots
 df6_hist = df5[
