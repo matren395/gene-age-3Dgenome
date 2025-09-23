@@ -706,7 +706,6 @@ df6_hist_deindex["autosomal_priority"] = [
 
 
 # Do not include End Bins (with length less than 10MB) in 10MB plots for consistency
-
 # This contains all of the 10MB bins and coordinates we will be working with, generated from the same data
 ten_mb_density = pd.read_excel(
     "/Users/marten/Downloads/for Dan/10MB_bins_start_20250506.xlsx"
@@ -715,6 +714,8 @@ ten_mb_density["chr"] = None
 ten_mb_density["end"] = False
 
 chr_keys = list(chromosome_lengths.keys())
+
+new_chr_str = "chr1"
 
 # For each of our bins (10MB across the whole chromosome)
 for xi, yi in ten_mb_density.iterrows():
@@ -739,6 +740,9 @@ ends = ten_mb_density[ten_mb_density.end == True]
 ends["bin_name"] = [
     f"{xi[0]}:{float(xi[1]//10_000_000)}" for xi in zip(ends.chr, ends.start)
 ]
+
+# Write out dataframe of the final bin of each chromosome
+ends.to_csv("bin_endpoint_data.tsv", sep="\t")
 
 
 # Mark if each gene is in an end bin

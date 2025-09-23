@@ -579,45 +579,12 @@ with pd.option_context(
 bin_sum_nongerm_counts_era.to_csv(f"Table_RS_Fig8_bin_era_{DATE_NAME}.tsv", sep="\t")
 
 
-display(bin_sum_nongerm_counts)
-
-
 # Do not include End Bins (with length less than 10MB) in 10MB localization plots for consistency
 # Proofed and validated elsewhere and later on.
 
 # This contains all of the 10MB bins and coordinates we will be working with, generated from the same data
-ten_mb_density = pd.read_excel(
-    "/Users/marten/Downloads/for Dan/10MB_bins_start_20250506.xlsx"
-)
-ten_mb_density["chr"] = None
-ten_mb_density["end"] = False
-
-chr_keys = list(chromosome_lengths.keys())
-
-# For each bin (10MB across the whole chromosome)
-for xi, yi in ten_mb_density.iterrows():
-
-    # If this is the first bin of the chromosome)
-    if yi["start"] == 1:
-        # Pop the chromosome name from the NCBI list , taking from the front of the list
-        new_chr = chr_keys.pop(0)
-        new_chr_str = f"chr{new_chr}"
-
-    # Append this with NCBI-proofed keys
-    ten_mb_density.loc[xi, "chr"] = new_chr_str
-
-    # if the end of the bin as after the end of the chromosome
-    if (yi["stop"] - chromosome_lengths[new_chr]) > 1:
-        # Then this is a last bin! and mark it as such
-        # print('endpoint at: ',xi)
-        ten_mb_density.loc[xi, "length"] = chromosome_lengths[new_chr] - yi["start"]
-        ten_mb_density.loc[xi, "end"] = True
-
-ends = ten_mb_density[ten_mb_density.end == True]
-
-ends["bin_name"] = [
-    f"{xi[0]}:{float(xi[1]//10_000_000)}" for xi in zip(ends.chr, ends.start)
-]
+# Read in dataframe of the final bin of each chromosome, as produced in Step #2
+ends = pd.read_csv("bin_endpoint_data.tsv", sep="\t")
 
 ends_idx = ends.set_index("bin_name")
 
@@ -626,7 +593,6 @@ end_list_dict = {end_i.split(":")[0]: end_i.split(":")[1] for end_i in end_list}
 
 
 ends_idx = ends.set_index("bin_name")
-display(ends_idx)
 
 
 # Calculate counts per 10MB bin - including end bins
