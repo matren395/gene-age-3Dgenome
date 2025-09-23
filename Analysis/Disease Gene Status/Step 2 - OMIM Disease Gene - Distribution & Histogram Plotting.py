@@ -115,6 +115,7 @@ disease_palette = {
     "Non-Disease Sex-Linked": "cyan",
 }
 
+
 # Colorblind colors
 colorblind_11 = sns.color_palette("colorblind", n_colors=11)
 
@@ -142,13 +143,6 @@ disease_palette["Mixed Dominant-Recessive Digenic"] = disease_palette[
 df6_hist = df5[
     (~df5.annotation.str.contains("Unannotated"))
     & (~df5.annotation.str.contains("orf"))
-]
-
-# Create option to graph in only 3 Eras, since 4-Mammal and 5-Primate can be sparse
-
-df6_hist["evolutionary_category_3era"] = [
-    xi.replace("5-Primate", "3-Chordate").replace("4-Mammal", "3-Chordate")
-    for xi in df6_hist["evolutionary_category"]
 ]
 
 df6_hist["disease_gene_inheritance"] = [
@@ -222,10 +216,7 @@ for hist_config in ["evolutionary_category_3era"]:
 
         xOnes, xTwos = plt.xticks()
 
-        xTwos = ["Ancient", "Metazoan", "Chordate", "Mammal", "Primate"]
-
-        if era_str == "3_era":
-            xTwos = xTwos[:3]
+        xTwos = ["Ancient", "Metazoan", "Chordate"]
 
         plt.xticks(xOnes, xTwos, size=20)
         plt.yticks(size=20)
@@ -310,10 +301,7 @@ for hist_config in ["evolutionary_category_3era"]:
 
         xOnes, xTwos = plt.xticks()
 
-        xTwos = ["Ancient", "Metazoan", "Chordate", "Mammal", "Primate"]
-
-        if era_str == "3_era":
-            xTwos = xTwos[:3]
+        xTwos = ["Ancient", "Metazoan", "Chordate"]
 
         plt.xticks(xOnes, xTwos, size=20)
 
@@ -385,10 +373,7 @@ for hist_config in ["evolutionary_category_3era"]:
 
         xOnes, xTwos = plt.xticks()
 
-        xTwos = ["Ancient", "Metazoan", "Chordate", "Mammal", "Primate"]
-
-        if era_str == "3_era":
-            xTwos = xTwos[:3]
+        xTwos = ["Ancient", "Metazoan", "Chordate"]
 
         plt.xticks(xOnes, xTwos, size=20)
         plt.yticks(size=20)
@@ -439,10 +424,7 @@ for hist_config in ["evolutionary_category_3era"]:
 
         xOnes, xTwos = plt.xticks()
 
-        xTwos = ["Ancient", "Metazoan", "Chordate", "Mammal", "Primate"]
-
-        if era_str == "3_era":
-            xTwos = xTwos[:3]
+        xTwos = ["Ancient", "Metazoan", "Chordate"]
 
         plt.xticks(xOnes, xTwos, size=22)
         plt.yticks(size=20)
