@@ -425,7 +425,6 @@ df_disease_joint_failures["Adjusted_Pvals_BH"] = "Not Applicable"
 df_disease_joint_failures["Adjusted_Pvals < 0.05"] = "Not Applicable"
 df_disease_joint_failures["Floats"] = "Not Applicable"
 df_disease_joint_failures["pvals"] = "Not Applicable"
-df_disease_joint_failures["pvals"] = "Not Applicable"
 
 
 df_disease_joint = pd.concat([df_disease_joint, df_disease_joint_failures])

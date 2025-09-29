@@ -252,7 +252,7 @@ with pd.option_context(
     None,
 ):
     display(ret_table_disease_germ)
-ret_table_disease_germ_simple.to_csv(f"Table_RS_Fig2_3c_{DATE_NAME}.tsv", sep="\t")
+ret_table_disease_germ.to_csv(f"Table_RS_Fig2_3c_{DATE_NAME}.tsv", sep="\t")
 
 
 # Build a generalized method to tabulate the proportion of each era by disease status
@@ -637,13 +637,6 @@ for bin_i in bin_sum_nongerm_counts.reset_index(drop=False)["10MB_bin"].unique()
     except:
         #         print('No dominant in: ',bin_i)
         per_bin_rd_counts[bin_i]["non-disease"] = 0
-
-    try:
-        per_bin_rd_counts[bin_i]["recessive"] = bin_sum_dict["count"][
-            bin_i, "Recessive"
-        ]
-    except:
-        per_bin_rd_counts[bin_i]["recessive"] = 0
 
     r_i = per_bin_rd_counts[bin_i]["recessive"]
     d_i = per_bin_rd_counts[bin_i]["dominant"]
