@@ -25,6 +25,7 @@ Step 2 - In 'GRCh37 Step 2 - Output Construction.ipynb', tables of the GRCh37 Co
 2+1 - These controls were run through the GTEx RNA-Seq pipeline, normalized in the same way as above, and found to not be discordant with GRCh38 controls.
 
 **Gene Regulation and Loop Classification**
+
 enhancer_assignment.sh used to pair putative enhancers to target gene promoters through either domains or enhancer-promoter loops
 
 loop_classification.sh used to determine mechanism of each looping interaction and identify gene age of any genes overlapping loop anchors within these loops
