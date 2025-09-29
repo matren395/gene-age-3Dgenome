@@ -146,14 +146,13 @@ df5_nonexcl = df5[df5.GRCh38_Expression_Plotting == True]
 
 
 # These serve as the tissue categories (functionally equivalent).
-# Still iterate over disease status and evolutionary category.
+# Still iterate over statuses.
 mean_stats = ["DKO_KO_mean", "Hap1_WT_mean", "Wapl_KO_mean", "SCC4_KO_mean"]
 
 
 df_meancount = df5_nonexcl[
     [
         "evolutionary_category_3era",
-        "disease_gene_inheritance_merged",
     ]
     + mean_stats
 ]
@@ -161,8 +160,7 @@ df_meancount = df5_nonexcl[
 
 melt_df = pd.melt(
     frame=df_meancount,
-    id_vars=[
-        "evolutionary_category_3era"    ],
+    id_vars=["evolutionary_category_3era"],
     var_name="Knockout",
     value_name="Mean(Count)",
     ignore_index=False,
@@ -194,14 +192,12 @@ df_era_3era = sig_table(
 
 # Corrected p-values from statsmodels.
 
-fixedpvals_disease_joint = statsmodels.stats.multitest.multipletests(
+fixedpvals_joint = statsmodels.stats.multitest.multipletests(
     df_era_3era["pvals"], method="fdr_bh"
 )[1]
 
-df_era_3era["Adjusted_Pvals_BH"] = fixedpvals_disease_joint
-df_era_3era["Adjusted_Pvals < 0.05"] = [
-    fp < 0.05 for fp in fixedpvals_disease_joint
-]
+df_era_3era["Adjusted_Pvals_BH"] = fixedpvals_joint
+df_era_3era["Adjusted_Pvals < 0.05"] = [fp < 0.05 for fp in fixedpvals_joint]
 
 
 def comparison_key(df):
@@ -221,5 +217,3 @@ df_era_3era.set_index("comparison_key", inplace=True)
 
 
 df_era_3era.to_csv("marten_knockout_era_significance.tsv", sep="\t")
-
-

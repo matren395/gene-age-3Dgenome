@@ -150,17 +150,13 @@ s3a_ensg_choice_sort_ensg = s3a_ensg_choice_sort[
 ]
 
 
-
 s3a_ensg_choice_sort_ensg["evolutionary_category_3era"] = [
     xi.replace("5-Primate", "3-Chordate").replace("4-Mammal", "3-Chordate")
     for xi in s3a_ensg_choice_sort_ensg["evolutionary_category"]
 ]
 
 
-constants = [
-    "ENSG",
-    "evolutionary_category_3era"
-]
+constants = ["ENSG", "evolutionary_category_3era"]
 condition_means = [f"{condition_i}_mean" for condition_i in unique_conditions]
 condition_stdevs = [f"{condition_i}_std" for condition_i in unique_conditions]
 columns_list = constants + condition_means + condition_stdevs
