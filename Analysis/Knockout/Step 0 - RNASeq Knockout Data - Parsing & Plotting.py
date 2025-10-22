@@ -121,7 +121,7 @@ unique_conditions = list(df_mega.Condition.unique())
 
 
 # Filter table with OMIM gene-disease associations and expression data to those with recorded RNA-Seq counts from knockout experiments
-# Done by matching gene identifiers from kncokout data to those in our original Table S1A
+# Done by matching gene identifiers from knockout data to those in our original Table S1A
 s3a_ensg_choice = s3a_ensg[s3a_ensg.ENSG.isin(ensg_counts.index)]
 
 
