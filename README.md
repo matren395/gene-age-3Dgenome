@@ -1,6 +1,6 @@
 # gene-age-3Dgenome
 
-Collection of scripts and notebooks released to accompany the manuscript entitled "Evolutionarily recent human genes show functional associations to 3D genome landscape and disease" by Katherine Fleck, Victor Luria, Daniel Marten, Nitanta Garag, Amir Karger, Trevor Hunter, William Phu, Kee-Myoung Nam, Nenad Sestan, Anne H. O'Donnell-Luria, Jelena Erceg.
+Collection of scripts and notebooks released to accompany the manuscript entitled "Evolutionarily recent human genes show functional associations to 3D genome landscape and disease" by Katherine Fleck, Victor Luria, Daniel Marten, Nitanta Garag, Amir Karger, Trevor Hunter, William Phu, Kee-Myoung Nam, Nenad Sestan, Anne O'Donnell-Luria, Jelena Erceg.
 
 Correspondence to: nenad.sestan@yale.edu (N.S.), odonnell@broadinstitute.org (A.O.D.L.); jelena.erceg@uconn.edu (J.E.).
 
